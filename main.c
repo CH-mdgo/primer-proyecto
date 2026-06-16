@@ -1,12 +1,16 @@
 #include <stdio.h>
+#include <string.h>
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_primitives.h>
 
 #define ALTO_M 25
 #define ANCHO_M 40
 
+void mapa(char MATRIZ[ALTO_M][ANCHO_M]);
 int main(void) {
+    
     char MAPA[ALTO_M][ANCHO_M];
+    mapa(MAPA);
 
     const int ANCHO = 800;
     const int ALTO = 600;
@@ -183,7 +187,7 @@ int main(void) {
                 y,
                 x + TAM_CUBO,
                 y + TAM_CUBO,
-                al_map_rgb(255, 255, 255)
+                al_map_rgb(255, 0, 255)
             );
 
             al_flip_display();
@@ -198,31 +202,32 @@ int main(void) {
 }
 
 void mapa(char MATRIZ[ALTO_M][ANCHO_M]) {
-    FILE *mapa=fopen("mapa.txt","r");
-    int i,j;
-    char letra;
 
+    FILE *mapa = fopen("mapa.txt", "r");
+    int i,j;
     if(!mapa){
-        printf("No se pudo abrir");
+        printf("No se pudo abrir el archivo");
         return;
     }
 
     for(i=0;i<ALTO_M;i++){
+
         for(j=0;j<ANCHO_M;j++){
-            letra=fgetc(MATRIZ);
-            if (letra==EOF){
-                break;
-            }
-            MATRIZ[i][j]=letra;
+
+            fscanf(mapa,"%d",&MATRIZ[i][j]);
+
         }
-        fgetc(MATRIZ);
     }
 
     for(i=0;i<ALTO_M;i++){
+
         for(j=0;j<ANCHO_M;j++){
-            printf("%c",MATRIZ[i][j]);
+
+            printf("%d",MATRIZ[i][j]);
+
         }
         printf("\n");
     }
     fclose(mapa);
+    return;
 }
