@@ -2,7 +2,12 @@
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_primitives.h>
 
+#define ALTO_M 25
+#define ANCHO_M 40
+
 int main(void) {
+    char MAPA[ALTO_M][ANCHO_M];
+
     const int ANCHO = 800;
     const int ALTO = 600;
 
@@ -38,7 +43,8 @@ int main(void) {
     /*
        Importante para tu computadora:
        esta línea evita el Segmentation fault al crear la ventana.
-    */
+
+       */
     al_set_new_display_flags(ALLEGRO_WINDOWED | ALLEGRO_OPENGL);
 
     ALLEGRO_DISPLAY *ventana = al_create_display(ANCHO, ALTO);
@@ -189,4 +195,34 @@ int main(void) {
     al_destroy_display(ventana);
 
     return 0;
+}
+
+void mapa(char MATRIZ[ALTO_M][ANCHO_M]) {
+    FILE *mapa=fopen("mapa.txt","r");
+    int i,j;
+    char letra;
+
+    if(!mapa){
+        printf("No se pudo abrir");
+        return;
+    }
+
+    for(i=0;i<ALTO_M;i++){
+        for(j=0;j<ANCHO_M;j++){
+            letra=fgetc(MATRIZ);
+            if (letra==EOF){
+                break;
+            }
+            MATRIZ[i][j]=letra;
+        }
+        fgetc(MATRIZ);
+    }
+
+    for(i=0;i<ALTO_M;i++){
+        for(j=0;j<ANCHO_M;j++){
+            printf("%c",MATRIZ[i][j]);
+        }
+        printf("\n");
+    }
+    fclose(mapa);
 }
